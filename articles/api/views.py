@@ -1,13 +1,17 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 from articles.models import Article
-from .serializers import ArticleSerializer
-
-class ArticleListAPIView(ListAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-
+from .serializers import ArticleDetailSerializer, ArticListleSerializer
 
 class ArticleDetailAPIView(RetrieveAPIView):
     queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
+    serializer_class = ArticleDetailSerializer
+    lookup_field = 'slug'
+    #lookup_url_kwarg = "abc"
+
+class ArticleListAPIView(ListAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticListleSerializer
+
+    #def get_queryset()
+
