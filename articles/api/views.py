@@ -6,7 +6,17 @@ from rest_framework.generics import (
     RetrieveAPIView,
     RetrieveUpdateAPIView,
     )
+
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAdminUser,
+    IsAuthenticatedOrReadOnly,
+    )
+
 from articles.models import Article
+
+from .permissions import IsOwnerOrReadOnly
 from .serializers import (
     ArticleCreateUpdateSerializer,
     ArticleDetailSerializer,
@@ -16,6 +26,7 @@ from .serializers import (
 class ArticleCreateAPIView(CreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleCreateUpdateSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -30,6 +41,7 @@ class ArticleUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleCreateUpdateSerializer
     lookup_field = 'slug'
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     #lookup_url_kwarg = "abc"
 
     def perform_update(self, serializer):
