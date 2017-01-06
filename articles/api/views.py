@@ -1,3 +1,10 @@
+from django.db.models import Q
+
+
+from rest_framework.filters import (
+    SearchFilter,
+    OrderingFilter,
+    )
 from rest_framework.generics import (
     CreateAPIView,
     DestroyAPIView,
@@ -17,6 +24,7 @@ from rest_framework.permissions import (
 from articles.models import Article
 
 from .permissions import IsOwnerOrReadOnly
+
 from .serializers import (
     ArticleCreateUpdateSerializer,
     ArticleDetailSerializer,
@@ -43,7 +51,6 @@ class ArticleUpdateAPIView(RetrieveUpdateAPIView):
     lookup_field = 'slug'
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     #lookup_url_kwarg = "abc"
-
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
         #email send_email
@@ -55,8 +62,20 @@ class ArticleDeleteAPIView(DestroyAPIView):
     #lookup_url_kwarg = "abc"
 
 class ArticleListAPIView(ListAPIView):
-    queryset = Article.objects.all()
     serializer_class = ArticListleSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['title', 'content', 'user__first_name']
 
-    #def get_queryset()
+    def get_queryset(self, *args, **kwargs):
+        #queryset_list = super(ArticleListAPIView, self).get_queryset(*args, **kwargs)
+        queryset_list = Article.objects.all()
+        query = self.request.GET.get("q")
+        if query:
+            queryset_list = queryset_list.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(user__first_name__icontains=query) |
+                Q(user__last_name__icontains=query)
+            ).distinct()
+        return queryset_list
 
