@@ -29,6 +29,7 @@ class ArticListleSerializer(ModelSerializer):
     class Meta:
         model = Article
         fields = [
+            'user',
             'title',
             'slug',
             'content',
