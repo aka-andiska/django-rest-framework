@@ -3,12 +3,13 @@ from rest_framework.serializers import ModelSerializer
 from articles.models import Article
 
 
-class ArticListleSerializer(ModelSerializer):
+class ArticleCreateUpdateSerializer(ModelSerializer):
     class Meta:
         model = Article
         fields = [
+            #'id',
             'title',
-            'slug',
+            #'slug',
             'content',
             'publish',
         ]
@@ -23,6 +24,18 @@ class ArticleDetailSerializer(ModelSerializer):
             'content',
             'publish',
         ]
+
+class ArticListleSerializer(ModelSerializer):
+    class Meta:
+        model = Article
+        fields = [
+            'title',
+            'slug',
+            'content',
+            'publish',
+        ]
+
+
 
 
 

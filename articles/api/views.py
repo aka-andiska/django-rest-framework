@@ -1,11 +1,20 @@
 from rest_framework.generics import (
+    CreateAPIView,
     DestroyAPIView,
     ListAPIView,
     UpdateAPIView,
     RetrieveAPIView,
     )
 from articles.models import Article
-from .serializers import ArticleDetailSerializer, ArticListleSerializer
+from .serializers import (
+    ArticleCreateUpdateSerializer,
+    ArticleDetailSerializer,
+    ArticListleSerializer
+)
+
+class ArticleCreateAPIView(CreateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleCreateUpdateSerializer
 
 class ArticleDetailAPIView(RetrieveAPIView):
     queryset = Article.objects.all()
@@ -15,7 +24,7 @@ class ArticleDetailAPIView(RetrieveAPIView):
 
 class ArticleUpdateAPIView(UpdateAPIView):
     queryset = Article.objects.all()
-    serializer_class = ArticleDetailSerializer
+    serializer_class = ArticleCreateUpdateSerializer
     lookup_field = 'slug'
     #lookup_url_kwarg = "abc"
 
