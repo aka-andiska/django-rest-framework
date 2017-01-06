@@ -29,6 +29,9 @@ class ArticleDetailSerializer(ModelSerializer):
 
 """"
 
+from articles.models import Article
+from articles.api.serializers import ArticleDetailSerializer
+
 data = {
     "title": "Lets Go!!",
     "content": "Go a Head",
@@ -36,7 +39,8 @@ data = {
     "slug": "Yeah-bro",
     }
 
-new_item = ArticleSerializer(data=data)
+obj = Article.objects.get(id=1)
+new_item = ArticleDetailSerializer(obj, data=data)
 if new_item.is_valid():
     new_item.save()
 else:
