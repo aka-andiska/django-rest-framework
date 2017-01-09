@@ -74,7 +74,7 @@ class ArticleListAPIView(ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         #queryset_list = super(ArticleListAPIView, self).get_queryset(*args, **kwargs)
-        queryset_list = Article.objects.all()
+        queryset_list = Article.objects.all() #filter(user=self.request.user)
         query = self.request.GET.get("q")
         if query:
             queryset_list = queryset_list.filter(

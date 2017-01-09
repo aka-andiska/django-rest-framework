@@ -17,6 +17,7 @@ class ArticleCreateUpdateSerializer(ModelSerializer):
             'content',
             'publish',
         ]
+
 article_detail_url = HyperlinkedIdentityField(
         view_name='articles-api:detail',
         lookup_field='slug'
@@ -27,6 +28,7 @@ class ArticleDetailSerializer(ModelSerializer):
     url = article_detail_url
     user = SerializerMethodField()
     image = SerializerMethodField()
+    html = SerializerMethodField()
     class Meta:
         model = Article
         fields = [
@@ -36,9 +38,13 @@ class ArticleDetailSerializer(ModelSerializer):
             'title',
             'slug',
             'content',
+            'html',
             'publish',
             'image',
         ]
+
+    def get_html(self, obj):
+        return obj.get_markdown()
 
     def get_user(self, obj):
         return str(obj.user.username)
