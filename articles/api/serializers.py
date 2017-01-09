@@ -1,4 +1,8 @@
-from rest_framework.serializers import ModelSerializer, HyperlinkedIdentityField
+from rest_framework.serializers import (
+    ModelSerializer,
+    HyperlinkedIdentityField,
+    SerializerMethodField
+    )
 
 from articles.models import Article
 
@@ -21,16 +25,30 @@ article_detail_url = HyperlinkedIdentityField(
 
 class ArticleDetailSerializer(ModelSerializer):
     url = article_detail_url
+    user = SerializerMethodField()
+    image = SerializerMethodField()
     class Meta:
         model = Article
         fields = [
             'url',
             'id',
+            'user',
             'title',
             'slug',
             'content',
             'publish',
+            'image',
         ]
+
+    def get_user(self, obj):
+        return str(obj.user.username)
+
+    def get_image(self, obj):
+        try:
+            image = obj.image.url
+        except:
+            image = None
+        return image
 
 class ArticListleSerializer(ModelSerializer):
     url = article_detail_url
@@ -38,6 +56,7 @@ class ArticListleSerializer(ModelSerializer):
         view_name='articles-api:delete',
         lookup_field='slug'
     )
+    user = SerializerMethodField()
     class Meta:
         model = Article
         fields = [
@@ -50,6 +69,8 @@ class ArticListleSerializer(ModelSerializer):
             'delete_url',
         ]
 
+    def get_user(self, obj):
+        return str(obj.user.username)
 
 
 
