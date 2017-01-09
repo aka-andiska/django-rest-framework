@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, HyperlinkedIdentityField
 
 from articles.models import Article
 
@@ -13,11 +13,18 @@ class ArticleCreateUpdateSerializer(ModelSerializer):
             'content',
             'publish',
         ]
+article_detail_url = HyperlinkedIdentityField(
+        view_name='articles-api:detail',
+        lookup_field='slug'
+        )
+
 
 class ArticleDetailSerializer(ModelSerializer):
+    url = article_detail_url
     class Meta:
         model = Article
         fields = [
+            'url',
             'id',
             'title',
             'slug',
@@ -26,14 +33,21 @@ class ArticleDetailSerializer(ModelSerializer):
         ]
 
 class ArticListleSerializer(ModelSerializer):
+    url = article_detail_url
+    delete_url = HyperlinkedIdentityField(
+        view_name='articles-api:delete',
+        lookup_field='slug'
+    )
     class Meta:
         model = Article
         fields = [
+            'url',
             'user',
             'title',
-            'slug',
+            #'slug',
             'content',
             'publish',
+            'delete_url',
         ]
 
 
