@@ -29,8 +29,9 @@ from comments.models import Comment
 
 
 from .serializers import (
-    CommentSerializer
-)
+    CommentSerializer,
+    CommentDetailSerializer
+    )
 
 #class ArticleCreateAPIView(CreateAPIView):
  #   queryset = Article.objects.all()
@@ -42,8 +43,8 @@ from .serializers import (
 
 class CommentDetailAPIView(RetrieveAPIView):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    #lookup_field = 'slug'
+    serializer_class = CommentDetailSerializer
+    lookup_field = 'pk'
     #lookup_url_kwarg = "abc"
 
 #class ArticleUpdateAPIView(RetrieveUpdateAPIView):
@@ -56,7 +57,7 @@ class CommentDetailAPIView(RetrieveAPIView):
      #   serializer.save(user=self.request.user)
         #email send_email
 
-#class ArticleDeleteAPIView(DestroyAPIView):
+#class ArticleDeleteAPIV iew(DestroyAPIView):
  #   queryset = Article.objects.all()
   # lookup_field = 'slug'
    # permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
