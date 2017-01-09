@@ -5,6 +5,7 @@ from rest_framework.filters import (
     SearchFilter,
     OrderingFilter,
     )
+
 from rest_framework.generics import (
     CreateAPIView,
     DestroyAPIView,
@@ -22,6 +23,8 @@ from rest_framework.permissions import (
     )
 
 from articles.models import Article
+
+from .pagination import ArticleLimitOffPagination, ArticlePageNumberPagination
 
 from .permissions import IsOwnerOrReadOnly
 
@@ -59,12 +62,15 @@ class ArticleDeleteAPIView(DestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleDetailSerializer
     lookup_field = 'slug'
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     #lookup_url_kwarg = "abc"
 
 class ArticleListAPIView(ListAPIView):
     serializer_class = ArticListleSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['title', 'content', 'user__first_name']
+    pagination_class = ArticlePageNumberPagination #PageNumberPagination
+
 
     def get_queryset(self, *args, **kwargs):
         #queryset_list = super(ArticleListAPIView, self).get_queryset(*args, **kwargs)
