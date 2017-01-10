@@ -21,19 +21,18 @@ class CommentManager(models.Manager):
     def create_by_model_type(self, model_type, slug, content, user, parent_obj=None):
         model_qs = ContentType.objects.filter(model=model_type)
         if model_qs.exists():
-            if model_qs.exists():
-                SomeModel = model_qs.first().model_class()
-                obj_qs = SomeModel.objects.filter(slug=self.slug)
-                if obj_qs.exists() or obj_qs.count() == 1:
-                    instance = self.model()
-                    instance.content = content
-                    instance.user = user
-                    instance.content_type = model_qs.first()
-                    instance.object_id = obj_qs.first().id
-                    if parent_obj:
-                        instance.parent = parent_obj
-                    instance.save()
-                    return instance
+            SomeModel = model_qs.first().model_class()
+            obj_qs = SomeModel.objects.filter(slug=slug)
+            if obj_qs.exists() and obj_qs.count() == 1:
+                instance = self.model()
+                instance.content = content
+                instance.user = user
+                instance.content_type = model_qs.first()
+                instance.object_id = obj_qs.first().id
+                if parent_obj:
+                    instance.parent = parent_obj
+                instance.save()
+                return instance
         return None
 
 
