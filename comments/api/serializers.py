@@ -37,7 +37,7 @@ class CommentChildSerializer(ModelSerializer):
 
 class CommentDetailSerializer(ModelSerializer):
     reply_count = SerializerMethodField()
-    replies =  SerializerMethodField()
+    replies = SerializerMethodField()
     class Meta:
         model = Comment
         fields = [
